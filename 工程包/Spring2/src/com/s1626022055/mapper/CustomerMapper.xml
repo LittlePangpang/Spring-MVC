@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.s1626022055.mapper.CustomerMapper">
+    <!--根据客户编号获取信息 -->
+	<select id="findCustomerById" parameterType="Integer"
+		resultType="com.s1626022055.po.Customer">
+		select * from tb_student where id = #{id}
+	</select>
+	
+	<!--根据客户名模糊查询信息列表-->
+	<select id="findCustomerByName" parameterType="String"
+	    resultType="com.s1626022055.po.Customer">
+	    <!-- select * from tb_student where loginname like '%${value}%' -->
+	    select * from tb_student where loginname like concat('%',#{value},'%')
+	</select>
+	
+	<!-- 添加信息 -->
+	<insert id="addCustomer" parameterType="com.s1626022055.po.Customer">
+	    insert into tb_student(loginname,password,username)
+	    values(#{loginname},#{password},#{username})
+	</insert>
+	
+	<!-- 更新信息 -->
+	<update id="updateCustomer" parameterType="com.s1626022055.po.Customer">
+	    update tb_student set
+	    loginname=#{loginname},password=#{password},username=#{username}
+	    where id=#{id}
+	</update>
+	
+	<!-- 删除信息 -->
+	<delete id="deleteCustomer" parameterType="Integer">
+	    delete from tb_student where id=#{id}
+	</delete>
+</mapper>

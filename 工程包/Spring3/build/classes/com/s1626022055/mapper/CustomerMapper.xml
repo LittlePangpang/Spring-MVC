@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.s1626022055.mapper.CustomerMapper">
+	<!-- <if>元素使用 -->
+ 	<select id="findCustomerByNameAndJobs" parameterType="com.s1626022055.po.Customer" 
+										   resultType="com.s1626022055.po.Customer"> 
+		select * from tb_student where 1=1 
+		<if test="loginname !=null and loginname !=''"> 
+			and loginname like concat('%',#{loginname},'%') 
+		</if> <if test="username !=null and username !=''"> 
+			and username= #{username} 
+		</if> 
+	</select> 
+
+
+
+	<!-- <where>元素 -->
+ 	<select id="findCustomerByloginnameAndusername" parameterType="com.s1626022055.po.Customer" 
+											resultType="com.s1626022055.po.Customer"> 
+		select * from tb_student 
+		<where> 
+		<if test="loginname !=null and loginname !=''"> 
+			and loginname like concat('%',#{loginname},'%') 
+		</if> 
+		<if test="username !=null and username !=''"> 
+			and username= #{username} 
+		</if> 
+		</where> 
+	</select> 
+
+
+
+	<!-- <trim>元素 -->
+<!--	<    select id="findCustomerByNameAndpassword" parameterType="com.s1626022055.po.Customer"
+		resultType="com.s1626022055.po.Customer">
+		select * from tb_student
+		<trim prefix="where" prefixOverrides="and">
+			<if test="loginname !=null and loginname !=''">
+				and loginname like concat('%',#{loginname}, '%')
+			</if>
+			<if test="password !=null and password !=''">
+				and password= #{password}
+			</if>
+		</trim>
+	</select>   -->
+
+	<!--<choose>(<when>、<otherwise>)元素使用 -->
+	<select id="findCustomerByNameOrJobs" parameterType="com.s1626022055.po.Customer"
+		resultType="com.s1626022055.po.Customer">
+		select * from tb_student where 1=1
+		<choose>
+			<when test="loginname !=null and loginname !=''">
+				and loginname like concat('%',#{loginname}, '%')
+			</when>
+			<when test="password !=null and password !=''">
+				and password= #{password}
+			</when>
+			<otherwise>
+				and username is not null
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- <set>元素 -->
+	<update id="updateCustomer" parameterType="com.s1626022055.po.Customer">
+		update tb_student
+		<set>
+			<if test="loginname !=null and loginname !=''">
+				loginname=#{loginname},
+			</if>
+			<if test="password !=null and password !=''">
+				password=#{password},
+			</if>
+			<if test="username !=null and username !=''">
+				username=#{username},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<!--<foreach>元素使用 -->
+	<select id="findCustomerByIds" parameterType="List"
+		resultType="com.s1626022055.po.Customer">
+		select * from tb_student where id in
+		<foreach item="id" index="index" collection="list" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+
+	<!--<bind>元素的使用：根据客户名模糊查询客户信息 -->
+	<select id="findCustomerByName" parameterType="com.s1626022055.po.Customer"
+		resultType="com.s1626022055.po.Customer">
+		<!--_parameter.getloginname()也可直接写成传入的字段属性名，即loginname -->
+		<bind name="pattern_loginname" value="'%'+_parameter.getLoginname()+'%'" />
+		select * from tb_student
+		where
+		loginname like #{pattern_loginname}
+	</select>
+
+</mapper>

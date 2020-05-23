@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.s1626022055.b.StudentMapper">
+    <!--根据学生编号获取学生信息 -->
+	<select id="findStudentById" parameterType="Integer"
+		resultType="com.s1626022055.a.Student">
+		select * from tb_student where id = #{id}
+	</select>
+	
+	<!--根据学生姓名模糊查询学生信息列表-->
+	<select id="findStudentByUsername" parameterType="String"
+	    resultType="com.s1626022055.a.Student">
+	    select * from tb_student where username like concat('%',#{value},'%')
+	</select>
+	
+	<!-- 添加学生信息 -->
+	<insert id="addStudent" parameterType="com.s1626022055.a.Student">
+	    insert into tb_student(loginname,password,username)
+	    values(#{loginname},#{password},#{username})
+	</insert>
+	
+	<!-- 更新学生信息 -->
+	<update id="updateStudent" parameterType="com.s1626022055.a.Student">
+	    update tb_student set
+	    loginname=#{loginname},password=#{password},username=#{username}
+	    where id=#{id}
+	</update>
+	
+	<!-- 删除学生信息 -->
+	<delete id="deleteStudent" parameterType="Integer">
+	    delete from tb_student where id=#{id}
+	</delete>
+</mapper>

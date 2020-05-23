@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- namespase 表示命名空间，最好唯一位移 -->
+<mapper namespace="s1615062096.dao.StudentDao">
+
+	<!--根据ID查询 -->
+	<select id="findStudentById" parameterType="Integer" resultType="student">
+		<!-- #{id}相当于？ -->
+		select * from tb_student2 where id = #{id}
+	</select>
+	<!--查询 -->
+	<select id="findAllStudent" resultType="student">
+		select * from tb_student2
+	</select>
+	
+	<!-- 插入 -->
+	<insert id="addStudent" parameterType="student">
+		insert into tb_student2(loginname, password, username) values (#{loginname}, #{password}, #{username})
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="updateStudent" parameterType="student">
+		update tb_student2 set loginname=#{loginname},password=#{password},username=#{username} where id = #{id}
+	</update>
+	
+	<!-- 5.	根据ID删除记录 -->
+	<delete id="deleteStudent" parameterType="Integer">
+		delete from tb_student2 where id = #{id}
+	</delete>
+</mapper>
